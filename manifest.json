@@ -1,0 +1,19 @@
+{
+  "name": "Fuerza y Equilibrio: Secuencias de Movimiento Seguro",
+  "short_name": "Fuerza y Equilibrio",
+  "description": "Programa genérico de ejercicio físico multicomponente adaptado para personas mayores en casa para mantener la autonomía.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#fffcf4",
+  "theme_color": "#2f5442",
+  "orientation": "portrait-primary",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22><rect width=%22512%22 height=%22512%22 rx=%22100%22 fill=%22%232f5442%22/><text x=%2250%%22 y=%2255%%22 font-size=%22220%22 font-family=%22sans-serif%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>FE</text><circle cx=%22390%22 cy=%22120%22 r=%2230%22 fill=%22%23c5a880%22/></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
