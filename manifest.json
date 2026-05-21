@@ -2,7 +2,7 @@
   "name": "Fuerza y Equilibrio: Secuencias de Movimiento Seguro",
   "short_name": "Fuerza y Equilibrio",
   "description": "Programa genérico de ejercicio físico multicomponente adaptado para personas mayores en casa para mantener la autonomía.",
-  "start_url": "index.html",
+  "start_url": "main.html",
   "display": "standalone",
   "background_color": "#fffcf4",
   "theme_color": "#2f5442",

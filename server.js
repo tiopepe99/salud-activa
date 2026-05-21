@@ -35,7 +35,7 @@ const requestHandler = (req, res) => {
   // Obtener ruta del archivo
   let filePath = req.url || '/';
   if (filePath === '/' || filePath === '') {
-    filePath = '/index.html';
+    filePath = '/main.html';
   }
 
   // Eliminar parámetros de consulta y anclas para encontrar el archivo real
@@ -58,11 +58,11 @@ const requestHandler = (req, res) => {
   fs.readFile(absolutePath, (error, content) => {
     if (error) {
       if (error.code === 'ENOENT') {
-        // Redirigir al index.html si no se encuentra el archivo (comportamiento SPA)
-        fs.readFile(path.join(ROOT_DIR, 'index.html'), (err, indexContent) => {
+        // Redirigir al main.html si no se encuentra el archivo (comportamiento SPA)
+        fs.readFile(path.join(ROOT_DIR, 'main.html'), (err, indexContent) => {
           if (err) {
             res.writeHead(500, { 'Content-Type': 'text/plain; charset=UTF-8' });
-            res.end('Error interno: index.html no encontrado');
+            res.end('Error interno: main.html no encontrado');
           } else {
             res.writeHead(200, {
               'Content-Type': 'text/html; charset=UTF-8',

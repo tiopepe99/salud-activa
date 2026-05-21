@@ -6,7 +6,7 @@
       "use": "@vercel/node",
       "config": {
         "includeFiles": [
-          "index.html",
+          "main.html",
           "styles.css",
           "app.js",
           "sw.js",
