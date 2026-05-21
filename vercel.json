@@ -14,7 +14,13 @@
       ]
     },
     {
-      "source": "/(.*)\\.(?:css|js)$",
+      "source": "/:file.css",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/:file.js",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=86400, must-revalidate" }
       ]
