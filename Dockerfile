@@ -12,7 +12,6 @@ WORKDIR /app
 RUN addgroup -S nodejs && adduser -S nodeapp -G nodejs
 
 # 5. Copiar los archivos del proyecto al contenedor
-COPY --chown=nodeapp:nodejs main.html ./
 COPY --chown=nodeapp:nodejs styles.css ./
 COPY --chown=nodeapp:nodejs app.js ./
 COPY --chown=nodeapp:nodejs sw.js ./

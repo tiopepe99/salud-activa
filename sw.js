@@ -1,9 +1,9 @@
-const CACHE_NAME = 'fuerza-equilibrio-cache-v8';
+const CACHE_NAME = 'fuerza-equilibrio-cache-v9';
 const ASSETS_TO_CACHE = [
   './',
   './main.html',
-  './styles.css?v=8',
-  './app.js?v=8',
+  './styles.css?v=9',
+  './app.js?v=9',
   './manifest.json'
 ];
 
