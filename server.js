@@ -23,82 +23,203 @@ const HTML_CONTENT = `<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fuerza y Equilibrio</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style>
-        button, div, h1, h2, p {
-            touch-action: manipulation;
-            -webkit-user-select: none;
-            user-select: none;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Fuerza y Equilibrio: Secuencias de Movimiento Seguro</title>
+    <link rel="stylesheet" href="styles.css?v=12">
+    <link rel="manifest" href="manifest.json">
+    <script src="app.js?v=12" defer></script>
+    <meta name="theme-color" content="#1b2e24">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Guía interactiva para realizar ejercicios de mantenimiento de forma correcta, segura y a su propio ritmo.">
 </head>
-<body class="bg-gradient-to-b from-blue-50 to-slate-100 font-sans antialiased text-slate-800">
+<body>
+    <div class="app-container">
+        <!-- CABECERA PERSISTENTE (ACCESIBILIDAD) -->
+        <header id="main-header" class="app-header">
+            <div class="header-title-container">
+                <span class="header-title">FUERZA Y EQUILIBRIO</span>
+            </div>
+            <div class="accessibility-bar">
+                <button onclick="adjustFontSize('decrease')" class="btn-acc" aria-label="Disminuir tamaño de letra">A-</button>
+                <button onclick="adjustFontSize('increase')" class="btn-acc" aria-label="Aumentar tamaño de letra">A+</button>
+                <button id="contrast-toggle-btn" onclick="toggleHighContrast()" class="btn-acc btn-acc-contrast" aria-label="Alternar contraste alto">👁️</button>
+            </div>
+        </header>
 
-    <div id="pantalla-bienvenida" class="flex flex-col justify-between h-screen p-6 max-w-md mx-auto bg-white shadow-2xl">
-        
-        <div class="text-center pt-2">
-            <h1 class="text-3xl font-black tracking-tight text-blue-950 leading-none">
-                FUERZA Y EQUILIBRIO
-            </h1>
-            <h2 class="text-sm font-bold text-emerald-600 tracking-widest uppercase mt-1">
-                Secuencias de Movimiento Seguro
-            </h2>
+        <!-- PANTALLA 2: PANTALLA PRINCIPAL DE CATEGORÍAS -->
+        <div id="home-screen" class="screen active">
+            <div class="diary-intro">
+                <h2>RUTINAS DE MOVIMIENTO</h2>
+                <p>Seleccione una categoría para ver los ejercicios recomendados</p>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card cat-fuerza" onclick="selectCategory('fuerza')">
+                    <div class="cat-icon">🏋️</div>
+                    <div class="cat-info">
+                        <span class="cat-title">Fuerza Muscular</span>
+                        <span class="cat-desc">Huesos fuertes y potencia diaria.</span>
+                    </div>
+                </div>
+                <div class="category-card cat-equilibrio" onclick="selectCategory('equilibrio')">
+                    <div class="cat-icon">⚖️</div>
+                    <div class="cat-info">
+                        <span class="cat-title">Equilibrio y Coordinación</span>
+                        <span class="cat-desc">Estabilidad y prevención de tropezones.</span>
+                    </div>
+                </div>
+                <div class="category-card cat-resistencia" onclick="selectCategory('resistencia')">
+                    <div class="cat-icon">🏃</div>
+                    <div class="cat-info">
+                        <span class="cat-title">Resistencia Aeróbica</span>
+                        <span class="cat-desc">Corazón fuerte y vitalidad diaria.</span>
+                    </div>
+                </div>
+                <div class="category-card cat-flexibilidad" onclick="selectCategory('flexibilidad')">
+                    <div class="cat-icon">🧘</div>
+                    <div class="cat-info">
+                        <span class="cat-title">Flexibilidad y Movilidad</span>
+                        <span class="cat-desc">Articulaciones ágiles y buena postura.</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="flex flex-col items-center my-auto py-4 w-full">
-            
-            <div class="w-40 h-40 mb-6 drop-shadow-xl bg-blue-50 rounded-full p-2 border border-blue-100 flex items-center justify-center">
-                <svg viewBox="0 0 100 100" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="44" fill="none" stroke="#1E3A8A" stroke-width="5" stroke-dasharray="5 3"/>
-                    <path d="M 22 72 Q 50 58 78 72" fill="none" stroke="#10B981" stroke-width="5" stroke-linecap="round"/>
-                    <circle cx="42" cy="36" r="6" fill="#1E3A8A" />
-                    <path d="M 42 44 Q 34 54 44 63" fill="none" stroke="#1E3A8A" stroke-width="5" stroke-linecap="round"/>
-                    <circle cx="58" cy="36" r="6" fill="#10B981" />
-                    <path d="M 58 44 Q 66 54 56 63" fill="none" stroke="#10B981" stroke-width="5" stroke-linecap="round"/>
-                </svg>
+        <!-- PANTALLA 3: DETALLE DE EJERCICIOS (CATÁLOGO PAGINADO) -->
+        <div id="exercises-screen" class="screen">
+            <div class="exercises-header">
+                <button class="btn-back" onclick="navigateTo('home')" aria-label="Volver a categorías">←</button>
+                <div class="exercises-title">
+                    <span id="exercises-cat-icon">🏋️</span>
+                    <span id="exercises-cat-title">Fuerza Muscular</span>
+                </div>
             </div>
-
-            <div class="bg-slate-50 border border-slate-100 rounded-2xl p-5 text-center shadow-inner w-full">
-                <p class="text-base font-semibold text-slate-700 leading-relaxed mb-3">
-                    ¡Le damos la bienvenida a su guía de salud!
-                </p>
-                <p class="text-sm text-slate-600 leading-relaxed">
-                    Esta herramienta interactiva le ayudará a realizar sus ejercicios de mantenimiento de forma correcta, segura y a su propio ritmo. Un complemento ideal para los talleres de su Centro de Salud.
-                </p>
+            <div class="exercise-pagination-bar">
+                <button id="btn-prev-exercise" class="btn btn-pagination" onclick="navigateActiveExercise(-1)">← Anterior</button>
+                <span id="exercise-pagination-info">Ejercicio 1 de 4</span>
+                <button id="btn-next-exercise" class="btn btn-pagination" onclick="navigateActiveExercise(1)">Siguiente →</button>
             </div>
-            
+            <div class="active-exercise-card">
+                <div class="exercise-main-content">
+                    <h3 id="active-exercise-title" class="exercise-title">Fuerza de agarre manual</h3>
+                    <div class="exercise-visual-row">
+                        <div id="active-exercise-svg-box" class="exercise-image-box"></div>
+                    </div>
+                    <div class="instructions-accordion-wrapper">
+                        <button id="btn-toggle-instructions" class="btn btn-accordion-toggle" onclick="toggleInstructionsAccordion()" aria-expanded="false">📖 Leer instrucciones</button>
+                        <div id="active-exercise-instructions-panel" class="instructions-panel" style="display: none;">
+                            <div class="instructions-panel-header">
+                                <span>Instrucciones de Realización</span>
+                                <button class="btn-close-instructions" onclick="toggleInstructionsAccordion()" aria-label="Cerrar instrucciones">✕</button>
+                            </div>
+                            <div id="active-exercise-steps" class="instructions-panel-steps"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="exercise-params-container">
+                    <div id="active-exercise-params" class="param-badge">📋 Recomendado: 3 series de 12 repeticiones</div>
+                </div>
+                <div class="exercise-action-footer-buttons">
+                    <button id="btn-active-speech" class="btn btn-speech" onclick="readActiveExerciseAloud()">🔊 Escuchar</button>
+                    <button id="btn-active-assistant" class="btn btn-primary" onclick="startActiveExerciseAssistant()">▶ Iniciar</button>
+                </div>
+            </div>
         </div>
 
-        <div class="flex flex-col gap-4 pb-2">
-            <div class="bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-xl shadow-sm">
-                <p class="text-xs text-amber-950 leading-snug">
-                    <strong>⚠️ Importante:</strong> Detenga la actividad de inmediato si nota dolor, mareos o fatiga. Su bienestar es lo primero.
-                </p>
+        <!-- PANTALLA 4: PASAPORTE / DIARIO DE 12 SEMANAS -->
+        <div id="diary-screen" class="screen">
+            <div class="diary-intro">
+                <h2>MI PASAPORTE DE LOGROS</h2>
+                <p>Registra tus progresos de ejercicio multicomponente de las 12 semanas</p>
             </div>
+            <div id="weeks-accordion-container" class="weeks-container"></div>
+            <div id="certificate-container" style="display: none; width: 100%;"></div>
+            <div class="diary-actions" style="text-align: center;">
+                <button class="btn btn-danger w-full" onclick="showResetConfirmation()" style="min-height: 52px;">🗑️ Reiniciar Pasaporte</button>
+            </div>
+        </div>
 
-            <button onclick="entrarApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xl py-5 rounded-2xl shadow-xl transform active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer">
-                EMPEZAR MIS EJERCICIOS 
-                <span class="text-2xl">▶️</span>
+        <!-- PANTALLA 5: MI PERFIL Y FIRMA -->
+        <div id="profile-screen" class="screen">
+            <div class="passport-border">
+                <div class="profile-card-header">Datos Autorizados del Portador</div>
+                <div class="profile-grid">
+                    <div class="profile-field">
+                        <label for="profile-name">Nombre</label>
+                        <input type="text" id="profile-name" class="profile-input" oninput="savePersonalData()" placeholder="Tu nombre...">
+                    </div>
+                    <div class="profile-field">
+                        <label for="profile-surname">Apellidos</label>
+                        <input type="text" id="profile-surname" class="profile-input" oninput="savePersonalData()" placeholder="Tus apellidos...">
+                    </div>
+                    <div class="profile-field">
+                        <label for="profile-age">Edad</label>
+                        <input type="number" id="profile-age" class="profile-input" oninput="savePersonalData()" placeholder="Tu edad...">
+                    </div>
+                    <div class="signature-area">
+                        <label>Firma Autorizada del Portador</label>
+                        <div class="signature-box">
+                            <canvas id="signature-pad" class="signature-canvas"></canvas>
+                            <div id="sig-placeholder" class="signature-placeholder">Firma con tu dedo o puntero aquí</div>
+                        </div>
+                        <button class="btn btn-secondary w-full" onclick="clearSignatureCanvas()" style="margin-top: 10px; min-height: 48px; font-size: var(--text-sm);">✕ Borrar Firma</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANTALLA 6: ASISTENTE INTERACTIVO DE ENTRENAMIENTO -->
+        <div id="assistant-screen" class="screen">
+            <div class="exercises-header">
+                <button class="btn-back" onclick="exitWorkoutAssistant()" aria-label="Salir del asistente">✕</button>
+                <div class="exercises-title">
+                    <span id="assistant-exercise-cat">Fuerza Muscular</span>
+                </div>
+            </div>
+            <div id="assistant-box-element" class="assistant-box state-exercise">
+                <h3 id="assistant-exercise-title" style="font-size: var(--text-lg); font-weight: 850; margin-bottom: 0.5rem;">Grip con toalla</h3>
+                <div id="assistant-phase-label" class="assistant-action-label assistant-text-primary">¡PREPARADOS!</div>
+                <div id="assistant-breathing-circle" class="breathing-guide">
+                    <span id="assistant-breathing-icon" class="breathing-icon">💪</span>
+                </div>
+                <div id="assistant-timer-display" class="assistant-timer-text assistant-text-primary">3</div>
+                <div id="assistant-reps-counter" class="assistant-reps-text assistant-text-primary">Repetición 1 de 12</div>
+                <div id="assistant-series-counter" class="assistant-series-text">Serie 1 de 3</div>
+                <button id="btn-skip-rest" class="btn btn-secondary" onclick="skipWorkoutRest()" style="display: none; min-height: 48px; width: 80%; margin-top: 0.5rem;">⏭️ Saltar Descanso</button>
+            </div>
+            <div class="assistant-controls-grid">
+                <button id="btn-assistant-pause-toggle" class="btn btn-primary" onclick="toggleWorkoutAssistantPause()">⏸ Pausar</button>
+            </div>
+        </div>
+
+        <!-- BARRA DE NAVEGACIÓN INFERIOR PERSISTENTE (ACCESIBLE) -->
+        <nav id="main-nav" class="app-nav">
+            <button class="nav-item active" onclick="navigateTo('home')">
+                <span class="nav-item-icon">🏋️</span>
+                <span>RUTINAS</span>
             </button>
+            <button class="nav-item" onclick="navigateTo('diary')">
+                <span class="nav-item-icon">📔</span>
+                <span>PASAPORTE</span>
+            </button>
+            <button class="nav-item" onclick="navigateTo('profile')">
+                <span class="nav-item-icon">👤</span>
+                <span>PERFIL</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- MODAL DE CONFIRMACIÓN DE REINICIO -->
+    <div id="reset-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-title">⚠️ ¿Reiniciar todo tu diario y progreso?</div>
+            <p style="font-size: var(--text-sm); color: var(--text-muted); line-height: 1.5;">Esta acción borrará de forma permanente todas las sesiones de ejercicios completadas de la escala de esfuerzo del diario de 12 semanas. No se puede deshacer.</p>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="hideResetConfirmation()" style="flex: 1; min-height: 48px;">Cancelar</button>
+                <button class="btn btn-danger" onclick="executeDiaryReset()" style="flex: 1; min-height: 48px;">Sí, reiniciar</button>
+            </div>
         </div>
-
     </div>
-
-    <div id="menu-principal" class="hidden p-6 max-w-md mx-auto text-center justify-center items-center h-screen">
-        <h2 class="text-2xl font-bold text-blue-900">Menú de Secuencias Cargado</h2>
-        <button onclick="location.reload()" class="mt-6 bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-semibold">Volver</button>
-    </div>
-
-    <script>
-        function entrarApp() {
-            localStorage.setItem('avisoSaludAceptado', 'true');
-            document.getElementById('pantalla-bienvenida').classList.add('hidden');
-            document.getElementById('menu-principal').classList.remove('hidden');
-            document.getElementById('menu-principal').classList.add('flex', 'flex-col');
-        }
-    </script>
 </body>
 </html>`;
 
@@ -131,9 +252,12 @@ const requestHandler = (req, res) => {
   // Obtener ruta limpia
   let filePath = req.url || '/';
   filePath = filePath.split('?')[0].split('#')[0];
+  if (filePath.endsWith('/') && filePath.length > 1) {
+    filePath = filePath.slice(0, -1);
+  }
 
-  // Si se solicita la raíz, index.html o main.html, se sirve directamente en memoria sin leer disco
-  if (filePath === '/' || filePath === '' || filePath === '/index.html' || filePath === '/main.html') {
+  // Si se solicita la raíz, index.html, main.html o las rutas de la función de Vercel, se sirve directamente en memoria sin leer disco
+  if (filePath === '/' || filePath === '' || filePath === '/index.html' || filePath === '/main.html' || filePath === '/api/index' || filePath === '/api/index.js' || filePath === '/api') {
     serveHtml(res);
     return;
   }

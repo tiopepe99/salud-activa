@@ -294,10 +294,10 @@ const EXERCISES_DATABASE = {
 
 // --- Variables y Estado Global de la App (Single Source of Truth) ---
 let appState = {
-  disclaimerAccepted: false,
+  disclaimerAccepted: true,
   fontSizeScale: 1.15, // Empieza en 1.15 (Gran tamaño predeterminado)
   highContrast: false,
-  currentScreen: 'welcome',
+  currentScreen: 'home',
   activeCategory: null,
   diary: {}
 };
@@ -366,18 +366,14 @@ window.onload = function() {
     console.error("Error al verificar certificado:", e);
   }
   
-  // 7. Enrutar a la pantalla correspondiente según la aceptación del aviso
+  // 7. Enrutar directamente a la pantalla de inicio (RUTINAS DE MOVIMIENTO)
   try {
-    if (appState.disclaimerAccepted) {
-      navigateTo('home');
-    } else {
-      navigateTo('welcome');
-    }
+    navigateTo('home');
   } catch (e) {
     console.error("Error al enrutar pantalla inicial:", e);
     // Fallback de emergencia
-    const welcome = document.getElementById('welcome-screen');
-    if (welcome) welcome.classList.add('active');
+    const home = document.getElementById('home-screen');
+    if (home) home.classList.add('active');
   }
 
   // 8. Registrar el Service Worker de forma segura
@@ -414,7 +410,7 @@ function loadStateFromStorage() {
       const parsed = JSON.parse(savedState);
       
       // Combinar estado guardado
-      appState.disclaimerAccepted = parsed.disclaimerAccepted || false;
+      appState.disclaimerAccepted = true;
       appState.fontSizeScale = parsed.fontSizeScale || 1.15;
       appState.highContrast = parsed.highContrast || false;
       
